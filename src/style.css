@@ -426,6 +426,18 @@ button:disabled, .btn-secondary.disabled, .btn-primary.disabled {
   color: var(--secondary-neon);
 }
 
+.vault-score-tag {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--secondary-neon);
+  background: rgba(5, 217, 232, 0.15);
+  border: 1px solid var(--secondary-neon);
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+  box-shadow: 0 0 10px rgba(5, 217, 232, 0.3);
+}
+
 .keys-count {
   font-size: 0.85rem;
   font-weight: 700;

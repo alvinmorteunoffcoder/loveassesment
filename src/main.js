@@ -399,6 +399,9 @@ function updateGridState() {
   const answeredCount = Object.keys(answers).length;
   currentLevel = answeredCount + 1;
   
+  const scoreBadge = document.getElementById('vault-score-badge');
+  if (scoreBadge) scoreBadge.style.display = 'none';
+
   const percentage = Math.min(100, (answeredCount / 22) * 100);
   progressBarFill.style.width = `${Math.max(4.5, percentage)}%`;
   progressHeartPin.style.left = `${Math.max(4.5, percentage)}%`;
@@ -1010,6 +1013,22 @@ function revealAnswersGrid() {
 
   if (!gridContainer.children || gridContainer.children.length === 0) {
     renderGrid();
+  }
+
+  // Calculate and display final score badge on inspection page
+  const scoreBadge = document.getElementById('vault-score-badge');
+  if (scoreBadge) {
+    let score = 0;
+    let maxScore = 0;
+    questions.forEach(q => {
+      if (q.type === 'collect' || q.type === 'yesno') return;
+      maxScore++;
+      const ans = answers[q.id]?.value;
+      if (ans && isAnswerCorrect(q, ans)) score++;
+    });
+    const percentage = Math.round((score / maxScore) * 100);
+    scoreBadge.innerText = `🏆 SCORE: ${percentage}%`;
+    scoreBadge.style.display = 'inline-block';
   }
 
   progressBarFill.style.width = '100%';
