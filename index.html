@@ -73,6 +73,13 @@
             <h1 class="vault-title">Unlock Our Memory Vault</h1>
             <p class="vault-subtitle">Answer each chapter to crack the 22 secret locks of our journey ❤️</p>
             
+            <div id="secret-letter-banner" class="secret-letter-banner">
+              <span id="secret-letter-status" class="secret-letter-status">⏳ Secret Letter Progress: <strong id="spending-timer-text" style="color:var(--primary-neon);">0s / 30s</strong> 💌</span>
+              <button id="btn-open-secret-letter" class="btn-primary glow-pulse secret-letter-btn" style="display: none;">
+                💌 View Secret Birthday Letter 💖
+              </button>
+            </div>
+
             <div class="progress-bar-container">
               <div id="progress-bar-fill" class="progress-bar-fill" style="width: 4.5%;"></div>
               <div id="progress-heart-pin" class="progress-heart-pin" style="left: 4.5%;">❤️</div>
@@ -133,7 +140,7 @@
           </div>
 
           <div class="modal-footer-stack">
-            <button id="btn-done-review" class="btn-primary btn-full">Close Inspector</button>
+            <button id="btn-done-review" class="btn-primary btn-full">Return to Decrypted Vault ❤️</button>
           </div>
         </div>
       </div>
@@ -195,11 +202,11 @@
           <div id="disqualified-ui" class="result-action-box" style="display: none;">
             <div class="penalty-banner">
               💋 22,000 KISS UNLOCK REQUIRED 💋<br>
-              <span class="penalty-sub">Send 22,000 kisses to unlock answer inspection & read all memory notes!</span>
+              <span class="penalty-sub">Send 22,000 kisses to decrypt all master answers & read sweet memory notes! 🔓</span>
             </div>
             
             <button id="btn-get-message" class="btn-primary glow-pulse">
-              💋 Send 22,000 Kisses & Unlock Answers
+              💋 Send 22,000 Kisses & Decrypt Answers
             </button>
             
             <div id="whatsapp-loader" class="loader-container" style="display: none;">
@@ -208,14 +215,14 @@
             </div>
           </div>
           
-          <!-- Qualified / Final UI (Removed .update-notice per image 2) -->
+          <!-- Qualified / Final UI -->
           <div id="final-message-ui" class="result-action-box" style="display: none;">
              <div class="final-quote-card">
-               <span class="quote-icon">💌</span>
-               <p id="final-quote-text" class="final-quote">"You are my today and all of my tomorrows. Happy Birthday, my love!"</p>
+                <span class="quote-icon">💌</span>
+                <p id="final-quote-text" class="final-quote">"You are my today and all of my tomorrows. Happy Birthday, my love!"</p>
              </div>
              <button id="btn-review-answers" class="btn-primary glow-pulse" style="margin-top: 10px;">
-               🔍 Inspect All 22 Cell Answers & Memory Notes
+               🔓 Decrypt Master Answers & Memory Notes 💖
              </button>
           </div>
         </div>

@@ -145,9 +145,15 @@ function resetProgress() {
   localStorage.removeItem('birthdayAnswers_v2');
   localStorage.removeItem('birthdayAnswers');
   localStorage.removeItem('vault_completed_v2');
+  localStorage.removeItem('secret_letter_unlocked');
+  localStorage.removeItem('vault_spending_time');
+  if (globalSpendingTimer) clearInterval(globalSpendingTimer);
   answers = {};
   currentLevel = 1;
   isReviewingMode = false;
+  secretLetterUnlocked = false;
+  pastPromptShown = false;
+  totalSpendingTimeSpent = 0;
   window.location.reload();
 }
 
@@ -190,7 +196,12 @@ let currentQuestionId = null;
 let isReviewingMode = false;
 let inspectionTimeSpent = 0;
 let inspectionTimer = null;
-let pastPromptShown = false;
+let secretLetterUnlocked = localStorage.getItem('secret_letter_unlocked') === 'true';
+let pastPromptShown = secretLetterUnlocked;
+let totalSpendingTimeSpent = parseInt(localStorage.getItem('vault_spending_time') || '0', 10);
+const REQUIRED_SPENDING_TIME = 30; // 30 seconds required
+let globalSpendingTimer = null;
+let pendingSecretLetterPopup = false;
 
 // --- DOM Elements ---
 const heartShutter = document.getElementById('heart-shutter');
@@ -278,7 +289,7 @@ function showInstructionNotice(userName, onComplete) {
     title: 'A Sweet Note Before You Begin',
     message: `Dearest <strong>${userName}</strong>,<br><br>
       Please <strong>do not leave or refresh the page</strong>. Do every action slowly, take your time, and cherish every single memory.<br><br>
-      As you spend time with love, you will unlock a special hidden secret message from my heart! 💖`,
+      As you explore our decrypted memories after completing the vault, you will unlock a special hidden secret message from my heart! 💖`,
     buttons: [
       {
         text: 'I Promise to Take My Time ❤️',
@@ -346,11 +357,11 @@ function showReturningUserDialogue() {
         }
       },
       {
-        text: '🔍 Re-inspect Memory Vault',
+        text: '🔓 Decrypt Master Answers & Memory Notes',
         class: 'btn-secondary btn-full',
         onClick: () => {
           pastPromptShown = true;
-          if (inspectionTimer) clearInterval(inspectionTimer);
+          if (globalSpendingTimer) clearInterval(globalSpendingTimer);
           switchStage(stageWelcome, stageVault);
           revealAnswersGrid();
         }
@@ -378,6 +389,7 @@ function openShutter() {
 function initVault() {
   renderGrid();
   updateGridState();
+  updateSecretLetterBanner();
 }
 
 function renderGrid() {
@@ -640,6 +652,7 @@ function getHintText(q) {
 btnCloseModal.onclick = () => {
   playSound('click');
   questionModal.classList.remove('active');
+  checkPendingSecretLetter();
 };
 
 function saveAnswer(id, value) {
@@ -653,6 +666,7 @@ function saveAnswer(id, value) {
   answers[id] = { value, timestamp, sessionId: sessionInfo.sessionId };
   localStorage.setItem('birthdayAnswers_v2', JSON.stringify(answers));
   questionModal.classList.remove('active');
+  checkPendingSecretLetter();
 
   if (GOOGLE_SHEET_WEBHOOK_URL) {
     let formattedVal = typeof value === 'object' ? JSON.stringify(value) : value;
@@ -683,12 +697,12 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
-// --- Answer Inspector / Review Modal ---
+// --- Decrypted Answers & Memory Review Modal ---
 function openReviewInspector(id) {
   const q = questions.find(item => item.id === id);
   if (!q) return;
 
-  reviewChapterTag.innerText = `${q.title.toUpperCase()} REVIEW`;
+  reviewChapterTag.innerText = `${q.title.toUpperCase()} — DECRYPTED`;
   reviewQuestionText.innerText = q.text;
 
   const ans = answers[id]?.value;
@@ -733,8 +747,8 @@ function openReviewInspector(id) {
   reviewModal.classList.add('active');
 }
 
-btnCloseReview.onclick = () => { playSound('click'); reviewModal.classList.remove('active'); };
-btnDoneReview.onclick = () => { playSound('click'); reviewModal.classList.remove('active'); };
+btnCloseReview.onclick = () => { playSound('click'); reviewModal.classList.remove('active'); checkPendingSecretLetter(); };
+btnDoneReview.onclick = () => { playSound('click'); reviewModal.classList.remove('active'); checkPendingSecretLetter(); };
 
 // --- Unrolled Birthday Letter Modal Handler ---
 function triggerPastAndFutureDialogue() {
@@ -768,6 +782,10 @@ function triggerPastAndFutureDialogue() {
 
 function openBirthdayLetterModal() {
   localStorage.setItem('vault_completed_v2', 'true');
+  localStorage.setItem('secret_letter_unlocked', 'true');
+  secretLetterUnlocked = true;
+  pastPromptShown = true;
+  updateSecretLetterBanner();
   bdayLetterModal.classList.add('active');
   const letterCard = bdayLetterModal.querySelector('.letter-card');
   if (letterCard) {
@@ -778,6 +796,69 @@ function openBirthdayLetterModal() {
 }
 btnCloseLetter.onclick = () => { playSound('click'); bdayLetterModal.classList.remove('active'); };
 btnDoneLetter.onclick = () => { playSound('click'); bdayLetterModal.classList.remove('active'); };
+
+// --- Decrypted Answers 30s Auto Timer Engine ---
+function startDecryptedAnswersTimer() {
+  updateSecretLetterBanner();
+  
+  if (secretLetterUnlocked) return;
+  if (globalSpendingTimer) return;
+
+  globalSpendingTimer = setInterval(() => {
+    totalSpendingTimeSpent += 1;
+    localStorage.setItem('vault_spending_time', totalSpendingTimeSpent.toString());
+    updateSecretLetterBanner();
+
+    if (totalSpendingTimeSpent >= REQUIRED_SPENDING_TIME) {
+      clearInterval(globalSpendingTimer);
+      globalSpendingTimer = null;
+      secretLetterUnlocked = true;
+      localStorage.setItem('secret_letter_unlocked', 'true');
+      updateSecretLetterBanner();
+
+      if (questionModal.classList.contains('active') || reviewModal.classList.contains('active')) {
+        pendingSecretLetterPopup = true;
+      } else {
+        trigger5SecondUnskippableAlert();
+      }
+    }
+  }, 1000);
+}
+
+function updateSecretLetterBanner() {
+  const statusEl = document.getElementById('secret-letter-status');
+  const btnEl = document.getElementById('btn-open-secret-letter');
+  
+  if (secretLetterUnlocked) {
+    if (statusEl) statusEl.innerHTML = `💌 <strong>Secret Birthday Letter Unlocked!</strong> 💖`;
+    if (btnEl) btnEl.style.display = 'inline-flex';
+  } else if (isReviewingMode) {
+    const displayTime = Math.min(totalSpendingTimeSpent, REQUIRED_SPENDING_TIME);
+    if (statusEl) statusEl.innerHTML = `⏳ Decrypted Memory Time: <strong id="spending-timer-text" style="color:var(--primary-neon);">${displayTime}s / ${REQUIRED_SPENDING_TIME}s</strong> 💌`;
+    if (btnEl) btnEl.style.display = 'none';
+  } else {
+    if (statusEl) statusEl.innerHTML = `🔐 <strong>Decrypted Vault:</strong> Complete 22 chapters to decrypt answers & unlock Secret Letter 💌`;
+    if (btnEl) btnEl.style.display = 'none';
+  }
+}
+
+function checkPendingSecretLetter() {
+  if (pendingSecretLetterPopup) {
+    pendingSecretLetterPopup = false;
+    setTimeout(() => {
+      trigger5SecondUnskippableAlert();
+    }, 300);
+  }
+}
+
+const btnOpenSecretLetter = document.getElementById('btn-open-secret-letter');
+if (btnOpenSecretLetter) {
+  btnOpenSecretLetter.addEventListener('click', () => {
+    playSound('click');
+    triggerHaptic();
+    openBirthdayLetterModal();
+  });
+}
 
 // --- Inspection Page 30s Auto Timer ---
 function startInspectionTimer() {
@@ -1001,7 +1082,7 @@ document.getElementById('btn-review-answers').onclick = () => {
   isReviewingMode = true;
   if (localStorage.getItem('vault_completed_v2') === 'true') {
     pastPromptShown = true;
-    if (inspectionTimer) clearInterval(inspectionTimer);
+    if (globalSpendingTimer) clearInterval(globalSpendingTimer);
   }
   switchStage(stageResult, stageVault);
   revealAnswersGrid();
@@ -1015,7 +1096,7 @@ function revealAnswersGrid() {
     renderGrid();
   }
 
-  // Calculate and display final score badge on inspection page
+  // Calculate and display final score badge on decrypted answers page
   const scoreBadge = document.getElementById('vault-score-badge');
   if (scoreBadge) {
     let score = 0;
@@ -1056,8 +1137,8 @@ function revealAnswersGrid() {
     }
   });
 
-  if (!pastPromptShown) {
-    startInspectionTimer();
+  if (!pastPromptShown || !secretLetterUnlocked) {
+    startDecryptedAnswersTimer();
   }
 }
 
