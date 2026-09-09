@@ -871,16 +871,18 @@ function trigger5SecondUnskippableAlert() {
 
   showCustomDialog({
     icon: '⏳',
-    title: 'One More Step Required!',
-    message: `One final step to unlock your Birthday Letter... Please wait <strong id="unskippable-timer" style="font-size:1.2rem; color:var(--primary-neon);">5</strong> seconds! 💖`,
+    title: 'Unlocking Your Birthday Surprise...',
+    message: `Preparing your secret Birthday Letter from my heart... <br><strong id="unskippable-timer" style="font-size:1.4rem; color:var(--primary-neon);">5</strong> seconds remaining! 💖`,
     buttons: [
       {
         id: 'btn-unskippable',
-        text: 'Please Wait (5s)...',
-        class: 'btn-secondary btn-full disabled',
-        disabled: true,
+        text: 'Unlocking in 5s...',
+        class: 'btn-primary btn-full glow-pulse',
+        disabled: false,
         onClick: () => {
-          triggerPastAndFutureDialogue();
+          playSound('correct');
+          createFloatingHearts();
+          openBirthdayLetterModal();
         }
       }
     ]
@@ -891,17 +893,15 @@ function trigger5SecondUnskippableAlert() {
 
   const countInterval = setInterval(() => {
     remainingSeconds -= 1;
-    if (timerTextEl) timerTextEl.innerText = remainingSeconds;
-    if (btnEl) btnEl.innerText = `Please Wait (${remainingSeconds}s)...`;
+    if (timerTextEl) timerTextEl.innerText = Math.max(0, remainingSeconds);
+    if (btnEl) btnEl.innerText = `Unlocking in ${Math.max(0, remainingSeconds)}s... (Tap to Open)`;
 
     if (remainingSeconds <= 0) {
       clearInterval(countInterval);
-      if (timerTextEl) timerTextEl.innerText = '0';
-      if (btnEl) {
-        btnEl.innerText = 'Proceed to Final Step 💌';
-        btnEl.className = 'btn-primary btn-full glow-pulse';
-        btnEl.disabled = false;
-      }
+      customDialogModal.classList.remove('active');
+      playSound('correct');
+      createFloatingHearts();
+      openBirthdayLetterModal();
     }
   }, 1000);
 }
