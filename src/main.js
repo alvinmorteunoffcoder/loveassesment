@@ -121,9 +121,13 @@ function showCustomDialog({ icon = '💖', title, message, buttons = [] }) {
 
   buttons.forEach(b => {
     const btn = document.createElement('button');
+    if (b.id) btn.id = b.id;
     btn.className = b.class || 'btn-primary btn-full';
     btn.innerText = b.text;
+    if (b.disabled) btn.disabled = true;
+
     btn.onclick = () => {
+      if (btn.disabled) return;
       playSound('click');
       triggerHaptic();
       customDialogModal.classList.remove('active');
@@ -833,8 +837,7 @@ function updateSecretLetterBanner() {
     if (statusEl) statusEl.innerHTML = `💌 <strong>Secret Birthday Letter Unlocked!</strong> 💖`;
     if (btnEl) btnEl.style.display = 'inline-flex';
   } else if (isReviewingMode) {
-    const displayTime = Math.min(totalSpendingTimeSpent, REQUIRED_SPENDING_TIME);
-    if (statusEl) statusEl.innerHTML = `⏳ Decrypted Memory Time: <strong id="spending-timer-text" style="color:var(--primary-neon);">${displayTime}s / ${REQUIRED_SPENDING_TIME}s</strong> 💌`;
+    if (statusEl) statusEl.innerHTML = `🔐 <strong>Decrypted Vault:</strong> Reading memory notes... 🌹`;
     if (btnEl) btnEl.style.display = 'none';
   } else {
     if (statusEl) statusEl.innerHTML = `🔐 <strong>Decrypted Vault:</strong> Complete 22 chapters to decrypt answers & unlock Secret Letter 💌`;
@@ -860,22 +863,7 @@ if (btnOpenSecretLetter) {
   });
 }
 
-// --- Inspection Page 30s Auto Timer ---
-function startInspectionTimer() {
-  if (pastPromptShown) return;
-  inspectionTimeSpent = 0;
-  
-  if (inspectionTimer) clearInterval(inspectionTimer);
 
-  inspectionTimer = setInterval(() => {
-    inspectionTimeSpent += 1;
-    if (inspectionTimeSpent >= 10 && !pastPromptShown) {
-      clearInterval(inspectionTimer);
-      reviewModal.classList.remove('active');
-      trigger5SecondUnskippableAlert();
-    }
-  }, 1000);
-}
 
 function trigger5SecondUnskippableAlert() {
   pastPromptShown = true;
