@@ -858,82 +858,46 @@ function calculateResults() {
   showResultUI(percentage);
 }
 
-function editDistance(s1, s2) {
-  s1 = s1.toLowerCase();
-  s2 = s2.toLowerCase();
-  let costs = [];
-  for (let i = 0; i <= s1.length; i++) {
-    let lastValue = i;
-    for (let j = 0; j <= s2.length; j++) {
-      if (i === 0) costs[j] = j;
-      else {
-        if (j > 0) {
-          let newValue = costs[j - 1];
-          if (s1.charAt(i - 1) !== s2.charAt(j - 1))
-            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
-          costs[j - 1] = lastValue;
-          lastValue = newValue;
-        }
-      }
-    }
-    if (i > 0) costs[s2.length] = lastValue;
-  }
-  return costs[s2.length];
-}
-
-function getSimilarityRatio(s1, s2) {
-  let longer = s1.length < s2.length ? s2 : s1;
-  if (longer.length === 0) return 1.0;
-  return (longer.length - editDistance(s1, s2)) / parseFloat(longer.length);
-}
-
-function isCloseMatch(userText, expectedText) {
-  if (!userText || !expectedText) return false;
-
-  const clean = (str) => str.toString().toLowerCase().replace(/[^\w\s]/g, '').trim();
-
-  const normUser = clean(userText);
-  const normExp = clean(expectedText);
-
-  if (!normUser || !normExp) return false;
-
-  // 1. Direct equality or substring containment
-  if (normUser === normExp || normUser.includes(normExp) || normExp.includes(normUser)) {
-    return true;
-  }
-
-  // 2. Significant word token overlap
-  const stopWords = new Set(['the', 'a', 'an', 'in', 'on', 'at', 'by', 'for', 'with', 'my', 'our', 'your', 'is', 'was', 'to', 'and', 'or', 'of', 'ss', 'gift', 'thing']);
-  const userWords = normUser.split(/\s+/).filter(w => w.length >= 2 && !stopWords.has(w));
-  const expWords = normExp.split(/\s+/).filter(w => w.length >= 2 && !stopWords.has(w));
-
-  if (userWords.length > 0 && expWords.length > 0) {
-    const matched = expWords.some(ew => userWords.some(uw => uw.includes(ew) || ew.includes(uw)));
-    if (matched) return true;
-  }
-
-  // 3. Edit distance similarity (>= 50% match)
-  return getSimilarityRatio(normUser, normExp) >= 0.5;
+function cleanString(str) {
+  return str ? str.toString().toLowerCase().replace(/[^\w\s]/g, '').trim() : '';
 }
 
 function isAnswerCorrect(q, ans) {
   if (!ans) return false;
-  
+
+  if (q.type === 'mcq' || q.type === 'yesno') {
+    return cleanString(ans) === cleanString(q.answer);
+  }
+
   if (q.type === 'match') {
+    if (typeof ans !== 'object' || !ans) return false;
     return ans.person1 === q.answer.person1 && ans.person2 === q.answer.person2;
-  } 
-  
+  }
+
   if (q.type === 'fill') {
-    const userStr = ans.toString().trim();
+    const userClean = cleanString(ans);
+    if (!userClean) return false;
+
+    // Exact match against main answer
+    if (userClean === cleanString(q.answer)) return true;
+
+    // Check accepted answers list
     if (q.acceptedAnswers && Array.isArray(q.acceptedAnswers)) {
-      if (q.acceptedAnswers.some(target => isCloseMatch(userStr, target))) {
+      if (q.acceptedAnswers.some(target => cleanString(target) === userClean)) {
+        return true;
+      }
+      // Substring token match for fill phrases (e.g. "moon light" inside "moon light lamp")
+      if (q.acceptedAnswers.some(target => {
+        const cleanT = cleanString(target);
+        return cleanT.length >= 3 && (userClean.includes(cleanT) || cleanT.includes(userClean));
+      })) {
         return true;
       }
     }
-    return isCloseMatch(userStr, q.answer.toString());
+    return false;
   }
-  
-  return isCloseMatch(ans.toString(), q.answer.toString());
+
+  return cleanString(ans) === cleanString(q.answer);
 }
 
 function showResultUI(percentage) {
