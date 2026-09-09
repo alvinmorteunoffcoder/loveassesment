@@ -1,234 +1,256 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <title>Memory Vault — Happy Birthday My Love ❤️</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <!-- Top Action Buttons -->
-    <div class="top-controls">
-      <button id="btn-reset-app" class="control-btn" aria-label="Reset Quiz Progress" title="Reset Quiz & Re-test">
-        <span>🔄 Reset Progress</span>
-      </button>
-      <button id="sound-toggle" class="control-btn" aria-label="Toggle Sound">
-        <span id="sound-icon">🔊</span>
-      </button>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Memory Vault — Happy Birthday My Love ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <!-- Top Action Buttons -->
+  <div class="top-controls">
+    <button id="btn-reset-app" class="control-btn" aria-label="Reset Quiz Progress" title="Reset Quiz & Re-test">
+      <span>🔄 Reset Progress</span>
+    </button>
+    <button id="sound-toggle" class="control-btn" aria-label="Toggle Sound">
+      <span id="sound-icon">🔊</span>
+    </button>
+  </div>
+
+  <!-- Floating Background Effects -->
+  <div id="hearts-container" class="floating-hearts"></div>
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <div id="app">
+    <!-- Stage 1: Welcome Screen -->
+    <div id="stage-welcome" class="screen active">
+      <div class="welcome-container glass-card">
+        <div class="badge-tag">BIRTHDAY SURPRISE EDITION</div>
+
+        <div id="heart-shutter" class="heart-shutter-container">
+          <div class="heart-glow-ring"></div>
+          <div class="heart-half heart-left"></div>
+          <div class="heart-half heart-right"></div>
+          <div class="heart-center-sparkle">✨</div>
+        </div>
+
+        <h1 id="welcome-text" class="welcome-text">
+          Happy birthday my girl,<br><span class="highlight-text">wanna marry me this year again?</span>
+        </h1>
+        <p class="welcome-subtext">Touch the heart to unlock our destiny...</p>
+
+        <div id="welcome-btns" class="btn-group">
+          <button id="btn-yes" class="btn-primary glow-pulse">
+            <span class="btn-icon">💖</span> Yes, A Thousand Times!
+          </button>
+          <button id="btn-no" class="btn-secondary">
+            <span class="btn-icon">💔</span> No
+          </button>
+        </div>
+
+        <div id="error-msg" class="error-banner" style="display: none;">
+          <span class="emoji-shake">🥺</span> No way! You have to go back and select <strong>YES</strong>!
+        </div>
+      </div>
     </div>
 
-    <!-- Floating Background Effects -->
-    <div id="hearts-container" class="floating-hearts"></div>
-    <div class="ambient-glow glow-1"></div>
-    <div class="ambient-glow glow-2"></div>
-    <div class="ambient-glow glow-3"></div>
+    <!-- Stage 2: Memory Vault -->
+    <div id="stage-vault" class="screen">
+      <div class="vault-wrapper glass-card">
 
-    <div id="app">
-      <!-- Stage 1: Welcome Screen -->
-      <div id="stage-welcome" class="screen active">
-        <div class="welcome-container glass-card">
-          <div class="badge-tag">BIRTHDAY SURPRISE EDITION</div>
-          
-          <div id="heart-shutter" class="heart-shutter-container">
-            <div class="heart-glow-ring"></div>
-            <div class="heart-half heart-left"></div>
-            <div class="heart-half heart-right"></div>
-            <div class="heart-center-sparkle">✨</div>
+        <!-- Top Vault Header & Level Progress Meter -->
+        <div class="vault-header">
+          <div class="vault-top-bar">
+            <span class="security-badge">🔒 MEMORY VAULT v2.0</span>
+            <span id="vault-score-badge" class="vault-score-tag" style="display: none;">🏆 SCORE: 100%</span>
+            <span id="keys-progress-text" class="keys-count">UNLOCKED: 0 / 22</span>
           </div>
-          
-          <h1 id="welcome-text" class="welcome-text">
-            Happy birthday my girl,<br><span class="highlight-text">wanna marry me this year again?</span>
-          </h1>
-          <p class="welcome-subtext">Touch the heart to unlock our destiny...</p>
-          
-          <div id="welcome-btns" class="btn-group">
-            <button id="btn-yes" class="btn-primary glow-pulse">
-              <span class="btn-icon">💖</span> Yes, A Thousand Times!
-            </button>
-            <button id="btn-no" class="btn-secondary">
-              <span class="btn-icon">💔</span> No
+
+          <h1 class="vault-title">Unlock Our Memory Vault</h1>
+          <p class="vault-subtitle">Answer each chapter to crack the 22 secret locks of our journey ❤️</p>
+
+          <div id="secret-letter-banner" class="secret-letter-banner">
+            <span id="secret-letter-status" class="secret-letter-status">🔐 <strong>Decrypted Vault:</strong> Complete
+              22 chapters to decrypt answers & unlock Secret Letter 💌</span>
+            <button id="btn-open-secret-letter" class="btn-primary glow-pulse secret-letter-btn" style="display: none;">
+              💌 View Secret Birthday Letter 💖
             </button>
           </div>
-          
-          <div id="error-msg" class="error-banner" style="display: none;">
-            <span class="emoji-shake">🥺</span> No way! You have to go back and select <strong>YES</strong>!
+
+          <div class="progress-bar-container">
+            <div id="progress-bar-fill" class="progress-bar-fill" style="width: 4.5%;"></div>
+            <div id="progress-heart-pin" class="progress-heart-pin" style="left: 4.5%;">❤️</div>
           </div>
         </div>
-      </div>
 
-      <!-- Stage 2: Memory Vault -->
-      <div id="stage-vault" class="screen">
-        <div class="vault-wrapper glass-card">
-          
-          <!-- Top Vault Header & Level Progress Meter -->
-          <div class="vault-header">
-            <div class="vault-top-bar">
-              <span class="security-badge">🔒 MEMORY VAULT v2.0</span>
-              <span id="vault-score-badge" class="vault-score-tag" style="display: none;">🏆 SCORE: 100%</span>
-              <span id="keys-progress-text" class="keys-count">UNLOCKED: 0 / 22</span>
-            </div>
-            
-            <h1 class="vault-title">Unlock Our Memory Vault</h1>
-            <p class="vault-subtitle">Answer each chapter to crack the 22 secret locks of our journey ❤️</p>
-            
-            <div id="secret-letter-banner" class="secret-letter-banner">
-              <span id="secret-letter-status" class="secret-letter-status">🔐 <strong>Decrypted Vault:</strong> Complete 22 chapters to decrypt answers & unlock Secret Letter 💌</span>
-              <button id="btn-open-secret-letter" class="btn-primary glow-pulse secret-letter-btn" style="display: none;">
-                💌 View Secret Birthday Letter 💖
-              </button>
-            </div>
-
-            <div class="progress-bar-container">
-              <div id="progress-bar-fill" class="progress-bar-fill" style="width: 4.5%;"></div>
-              <div id="progress-heart-pin" class="progress-heart-pin" style="left: 4.5%;">❤️</div>
-            </div>
-          </div>
-
-          <!-- 22 Level Grid -->
-          <div id="grid-container" class="grid-container">
-            <!-- 22 interactive cells generated dynamically -->
-          </div>
+        <!-- 22 Level Grid -->
+        <div id="grid-container" class="grid-container">
+          <!-- 22 interactive cells generated dynamically -->
         </div>
       </div>
-
-      <!-- Interactive Question Modal -->
-      <div id="question-modal" class="modal-overlay">
-        <div class="glass-card modal-content">
-          <div class="modal-header">
-            <span id="modal-chapter" class="chapter-tag">CHAPTER 1</span>
-            <button id="btn-close-modal" class="close-x">&times;</button>
-          </div>
-          
-          <h2 id="modal-question" class="question-text"></h2>
-          <p id="modal-hint" class="question-hint"></p>
-          
-          <div id="modal-body" class="modal-body-content"></div>
-          
-          <div class="modal-footer">
-            <button id="btn-submit-answer" class="btn-primary btn-full">
-              Unlock Chapter Lock 🔓
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Detailed Answer Review Modal (Removed "Take Me to Past" button per image 1) -->
-      <div id="review-modal" class="modal-overlay">
-        <div class="glass-card modal-content review-content">
-          <div class="modal-header">
-            <span id="review-chapter-tag" class="chapter-tag">CHAPTER REVIEW</span>
-            <button id="btn-close-review" class="close-x">&times;</button>
-          </div>
-          
-          <h2 id="review-question-text" class="question-text"></h2>
-          
-          <div class="review-details-box">
-            <div class="review-row">
-              <span class="review-label">Your Submitted Answer:</span>
-              <div id="review-user-ans" class="review-val user-ans-box"></div>
-            </div>
-            <div class="review-row">
-              <span class="review-label">Expected Master Answer:</span>
-              <div id="review-right-ans" class="review-val right-ans-box"></div>
-            </div>
-            <div class="review-row note-row">
-              <span class="review-label">Memory Note:</span>
-              <p id="review-memory-note" class="review-note"></p>
-            </div>
-          </div>
-
-          <div class="modal-footer-stack">
-            <button id="btn-done-review" class="btn-primary btn-full">Return to Decrypted Vault ❤️</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Custom Build Romantic Dialogue Modal -->
-      <div id="custom-dialog-modal" class="modal-overlay dialog-overlay">
-        <div class="glass-card dialog-content">
-          <span id="dialog-icon" class="dialog-icon">💖</span>
-          <h2 id="dialog-title" class="dialog-title">Notice</h2>
-          <p id="dialog-message" class="dialog-message"></p>
-          <div id="dialog-actions" class="dialog-actions">
-            <!-- Dynamic Buttons Generated by JS -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Unrolling Birthday Message Modal (Revealed ONLY after completing 30s past prompt) -->
-      <div id="bday-letter-modal" class="modal-overlay">
-        <div class="glass-card modal-content letter-card">
-          <div class="modal-header">
-            <span class="chapter-tag">LETTER OF ETERNAL LOVE 💌</span>
-            <button id="btn-close-letter" class="close-x">&times;</button>
-          </div>
-          <div class="letter-scroll-body">
-            <span class="letter-icon">🌹</span>
-            <h2 class="letter-title">Happy Birthday, My Girl!</h2>
-            <div class="letter-text">
-              <p>My Dearest Love,</p>
-              <p>From the moment we met in November 2022 to every smile, every memory, and every storm we survived — you have been the brightest gift in my life.</p>
-              <p>No matter what score we got, or how many kisses we sent, my promise to you is absolute: <strong>I choose you today, tomorrow, on April 6 2026, and for all eternity.</strong></p>
-              <p>May your birthday be filled with endless laughter, infinite warm hugs, and all the love in the universe. Happy Birthday, my soulmate!</p>
-              <p class="letter-signature">Forever Yours,<br>Charlie ❤️</p>
-            </div>
-          </div>
-          <div class="modal-footer-stack" style="margin-top: 1rem;">
-            <button id="btn-done-letter" class="btn-primary btn-full glow-pulse">
-              💖 I Love You Forever!
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stage 3 & 4: Result / Disqualified Screen -->
-      <div id="stage-result" class="screen">
-        <div class="glass-card result-card">
-          <div class="result-badge-container">
-            <span id="result-emoji" class="result-emoji">🥰</span>
-          </div>
-          
-          <h2 id="result-title" class="result-title"></h2>
-          <p id="result-desc" class="result-desc"></p>
-
-          <div id="score-ring-container" class="score-display">
-            <span id="score-percentage-text" class="score-num">100%</span>
-            <span class="score-label">Love Match Score</span>
-          </div>
-          
-          <!-- Disqualified flow UI -->
-          <div id="disqualified-ui" class="result-action-box" style="display: none;">
-            <div class="penalty-banner">
-              💋 22,000 KISS UNLOCK REQUIRED 💋<br>
-              <span class="penalty-sub">Send 22,000 kisses to decrypt all master answers & read sweet memory notes! 🔓</span>
-            </div>
-            
-            <button id="btn-get-message" class="btn-primary glow-pulse">
-              💋 Send 22,000 Kisses & Decrypt Answers
-            </button>
-            
-            <div id="whatsapp-loader" class="loader-container" style="display: none;">
-              <div class="shimmer-spinner"></div>
-              <p class="loader-text">Sending 22,000 kisses via WhatsApp...<br>Verifying kiss transfer & unlocking vault ✨</p>
-            </div>
-          </div>
-          
-          <!-- Qualified / Final UI -->
-          <div id="final-message-ui" class="result-action-box" style="display: none;">
-             <div class="final-quote-card">
-                <span class="quote-icon">💌</span>
-                <p id="final-quote-text" class="final-quote">"You are my today and all of my tomorrows. Happy Birthday, my love!"</p>
-             </div>
-             <button id="btn-review-answers" class="btn-primary glow-pulse" style="margin-top: 10px;">
-               🔓 Decrypt Master Answers & Memory Notes 💖
-             </button>
-          </div>
-        </div>
-      </div>
-
     </div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+
+    <!-- Interactive Question Modal -->
+    <div id="question-modal" class="modal-overlay">
+      <div class="glass-card modal-content">
+        <div class="modal-header">
+          <span id="modal-chapter" class="chapter-tag">CHAPTER 1</span>
+          <button id="btn-close-modal" class="close-x">&times;</button>
+        </div>
+
+        <h2 id="modal-question" class="question-text"></h2>
+        <p id="modal-hint" class="question-hint"></p>
+
+        <div id="modal-body" class="modal-body-content"></div>
+
+        <div class="modal-footer">
+          <button id="btn-submit-answer" class="btn-primary btn-full">
+            Unlock Chapter Lock 🔓
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detailed Answer Review Modal (Removed "Take Me to Past" button per image 1) -->
+    <div id="review-modal" class="modal-overlay">
+      <div class="glass-card modal-content review-content">
+        <div class="modal-header">
+          <span id="review-chapter-tag" class="chapter-tag">CHAPTER REVIEW</span>
+          <button id="btn-close-review" class="close-x">&times;</button>
+        </div>
+
+        <h2 id="review-question-text" class="question-text"></h2>
+
+        <div class="review-details-box">
+          <div class="review-row">
+            <span class="review-label">Your Submitted Answer:</span>
+            <div id="review-user-ans" class="review-val user-ans-box"></div>
+          </div>
+          <div class="review-row">
+            <span class="review-label">Expected Master Answer:</span>
+            <div id="review-right-ans" class="review-val right-ans-box"></div>
+          </div>
+          <div class="review-row note-row">
+            <span class="review-label">Memory Note:</span>
+            <p id="review-memory-note" class="review-note"></p>
+          </div>
+        </div>
+
+        <div class="modal-footer-stack">
+          <button id="btn-done-review" class="btn-primary btn-full">Return to Decrypted Vault ❤️</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom Build Romantic Dialogue Modal -->
+    <div id="custom-dialog-modal" class="modal-overlay dialog-overlay">
+      <div class="glass-card dialog-content">
+        <span id="dialog-icon" class="dialog-icon">💖</span>
+        <h2 id="dialog-title" class="dialog-title">Notice</h2>
+        <p id="dialog-message" class="dialog-message"></p>
+        <div id="dialog-actions" class="dialog-actions">
+          <!-- Dynamic Buttons Generated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Unrolling Birthday Message Modal (Revealed ONLY after completing 30s past prompt) -->
+    <div id="bday-letter-modal" class="modal-overlay">
+      <div class="glass-card modal-content letter-card">
+        <div class="modal-header">
+          <span class="chapter-tag">LETTER OF ETERNAL LOVE 💌</span>
+          <button id="btn-close-letter" class="close-x">&times;</button>
+        </div>
+        <div class="letter-scroll-body">
+          <span class="letter-icon">🌹</span>
+          <h2 class="letter-title">Happy Birthday, My Girl!</h2>
+          <div class="letter-text">
+            <p>Hey Sathya, my Shaki... Happy Birthday to you. 🎂✨</p>
+            <p>I hope you loved this journey, despite everything. You meant more to me than anything in this world. 🌍
+              You gave me my first earnings in life, you gave me my first experience of love being returned, and you
+              gave me the space to be exactly who I wanted to be. 🌱 You gave me multiple chances, giving me multiple
+              lives like we were in a game. 🎮💛
+            <p>But apart from all that... I know I’m the one who wasn't good for you. 😔 I know I wasn't the right fit,
+              and I’m the one who ruined things in the name of love. I'm so sorry for being the one who pulled you into
+              so much trauma. 💔 I don’t know whether you were ever truly satisfied with my love, but even though I have
+              my flaws, I always tried my absolute hardest to put in the effort for you. No matter if you loved it,
+              respected it, or whatever... I just loved surprising you, and I hope I at least succeeded in making you
+              happy with those surprises. 🎁
+            <p>I still remember the day I shouted "Shaki, I love you!" on the road while returning from Tiruvallur. 🛣️
+              I really miss you, Shaki. I really missed you. 🥺
+            <p>It's okay, my girl. Just don't expect anything from me anymore, please take that as my kind request. 🙏
+              The best gift I can give you for this year is your freedom. Go and fly, just be exactly who you are! 🕊️✨
+            <p>Not in this birth... (but maybe again). 🌌🖤</p>
+            <p class="letter-signature">Forever Yours,<br>Charlie ❤️</p>
+          </div>
+        </div>
+        <div class="modal-footer-stack" style="margin-top: 1rem;">
+          <button id="btn-done-letter" class="btn-primary btn-full glow-pulse">
+            💖 I Love You Forever!
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 3 & 4: Result / Disqualified Screen -->
+    <div id="stage-result" class="screen">
+      <div class="glass-card result-card">
+        <div class="result-badge-container">
+          <span id="result-emoji" class="result-emoji">🥰</span>
+        </div>
+
+        <h2 id="result-title" class="result-title"></h2>
+        <p id="result-desc" class="result-desc"></p>
+
+        <div id="score-ring-container" class="score-display">
+          <span id="score-percentage-text" class="score-num">100%</span>
+          <span class="score-label">Love Match Score</span>
+        </div>
+
+        <!-- Disqualified flow UI -->
+        <div id="disqualified-ui" class="result-action-box" style="display: none;">
+          <div class="penalty-banner">
+            💋 22,000 KISS UNLOCK REQUIRED 💋<br>
+            <span class="penalty-sub">Send 22,000 kisses to decrypt all master answers & read sweet memory notes!
+              🔓</span>
+          </div>
+
+          <button id="btn-get-message" class="btn-primary glow-pulse">
+            💋 Send 22,000 Kisses & Decrypt Answers
+          </button>
+
+          <div id="whatsapp-loader" class="loader-container" style="display: none;">
+            <div class="shimmer-spinner"></div>
+            <p class="loader-text">Sending 22,000 kisses via WhatsApp...<br>Verifying kiss transfer & unlocking vault ✨
+            </p>
+          </div>
+        </div>
+
+        <!-- Qualified / Final UI -->
+        <div id="final-message-ui" class="result-action-box" style="display: none;">
+          <div class="final-quote-card">
+            <span class="quote-icon">💌</span>
+            <p id="final-quote-text" class="final-quote">"You are my today and all of my tomorrows. Happy Birthday, my
+              love!"</p>
+          </div>
+          <button id="btn-review-answers" class="btn-primary glow-pulse" style="margin-top: 10px;">
+            🔓 Decrypt Master Answers & Memory Notes 💖
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
 </html>
