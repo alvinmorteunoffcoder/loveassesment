@@ -250,6 +250,47 @@ function isVaultCompleted() {
   return localStorage.getItem('vault_completed_v2') === 'true' || Object.keys(answers).length >= 22;
 }
 
+function showPoeticNamePrompt(onComplete) {
+  const currentName = localStorage.getItem('vault_user_name') || 'Shaki';
+  showCustomDialog({
+    icon: '🌹',
+    title: 'Who Is This Beautiful Soul?',
+    message: `Before we unlock our Memory Vault, please tell me your sweet name, my love:<br>
+      <input id="poetic-name-input" type="text" class="input-field" style="margin-top:12px;" placeholder="e.g. Shaki" value="${currentName}" />`,
+    buttons: [
+      {
+        text: 'Begin Journey ❤️',
+        class: 'btn-primary btn-full glow-pulse',
+        onClick: () => {
+          const inputEl = document.getElementById('poetic-name-input');
+          const name = (inputEl && inputEl.value.trim()) ? inputEl.value.trim() : 'Shaki';
+          localStorage.setItem('vault_user_name', name);
+          showInstructionNotice(name, onComplete);
+        }
+      }
+    ]
+  });
+}
+
+function showInstructionNotice(userName, onComplete) {
+  showCustomDialog({
+    icon: '✨',
+    title: 'A Sweet Note Before You Begin',
+    message: `Dearest <strong>${userName}</strong>,<br><br>
+      Please <strong>do not leave or refresh the page</strong>. Do every action slowly, take your time, and cherish every single memory.<br><br>
+      As you spend time with love, you will unlock a special hidden secret message from my heart! 💖`,
+    buttons: [
+      {
+        text: 'I Promise to Take My Time ❤️',
+        class: 'btn-primary btn-full glow-pulse',
+        onClick: () => {
+          if (onComplete) onComplete();
+        }
+      }
+    ]
+  });
+}
+
 function initWelcome() {
   heartShutter.addEventListener('click', openShutter);
 
@@ -263,19 +304,17 @@ function initWelcome() {
       return;
     }
 
-    showCustomDialog({
-      icon: '🥰',
-      title: 'Oh My Love!',
-      message: `Welcome to our Memory Vault! Let’s enter together ❤️`,
-      buttons: [{
-        text: 'Enter Vault 🔑',
-        class: 'btn-primary btn-full glow-pulse',
-        onClick: () => {
-          switchStage(stageWelcome, stageVault);
-          initVault();
-        }
-      }]
-    });
+    if (!localStorage.getItem('vault_user_name')) {
+      showPoeticNamePrompt(() => {
+        switchStage(stageWelcome, stageVault);
+        initVault();
+      });
+    } else {
+      showInstructionNotice(getSessionInfo().userName, () => {
+        switchStage(stageWelcome, stageVault);
+        initVault();
+      });
+    }
   });
 
   btnNo.addEventListener('click', () => {
@@ -749,7 +788,48 @@ function startInspectionTimer() {
     if (inspectionTimeSpent >= 30 && !pastPromptShown) {
       clearInterval(inspectionTimer);
       reviewModal.classList.remove('active');
-      triggerPastAndFutureDialogue();
+      trigger5SecondUnskippableAlert();
+    }
+  }, 1000);
+}
+
+function trigger5SecondUnskippableAlert() {
+  pastPromptShown = true;
+  let remainingSeconds = 5;
+
+  showCustomDialog({
+    icon: '⏳',
+    title: 'One More Step Required!',
+    message: `One final step to unlock your Birthday Letter... Please wait <strong id="unskippable-timer" style="font-size:1.2rem; color:var(--primary-neon);">5</strong> seconds! 💖`,
+    buttons: [
+      {
+        id: 'btn-unskippable',
+        text: 'Please Wait (5s)...',
+        class: 'btn-secondary btn-full disabled',
+        disabled: true,
+        onClick: () => {
+          triggerPastAndFutureDialogue();
+        }
+      }
+    ]
+  });
+
+  const btnEl = document.getElementById('btn-unskippable');
+  const timerTextEl = document.getElementById('unskippable-timer');
+
+  const countInterval = setInterval(() => {
+    remainingSeconds -= 1;
+    if (timerTextEl) timerTextEl.innerText = remainingSeconds;
+    if (btnEl) btnEl.innerText = `Please Wait (${remainingSeconds}s)...`;
+
+    if (remainingSeconds <= 0) {
+      clearInterval(countInterval);
+      if (timerTextEl) timerTextEl.innerText = '0';
+      if (btnEl) {
+        btnEl.innerText = 'Proceed to Final Step 💌';
+        btnEl.className = 'btn-primary btn-full glow-pulse';
+        btnEl.disabled = false;
+      }
     }
   }, 1000);
 }
