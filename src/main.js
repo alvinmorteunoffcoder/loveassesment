@@ -785,7 +785,7 @@ function startInspectionTimer() {
 
   inspectionTimer = setInterval(() => {
     inspectionTimeSpent += 1;
-    if (inspectionTimeSpent >= 30 && !pastPromptShown) {
+    if (inspectionTimeSpent >= 10 && !pastPromptShown) {
       clearInterval(inspectionTimer);
       reviewModal.classList.remove('active');
       trigger5SecondUnskippableAlert();
@@ -1043,6 +1043,11 @@ document.getElementById('btn-review-answers').onclick = () => {
 function revealAnswersGrid() {
   isReviewingMode = true;
   localStorage.setItem('vault_completed_v2', 'true');
+
+  if (!gridContainer.children || gridContainer.children.length === 0) {
+    renderGrid();
+  }
+
   progressBarFill.style.width = '100%';
   progressHeartPin.style.left = '100%';
   keysProgressText.innerText = `ALL 22 CHAPTERS UNLOCKED`;
@@ -1067,6 +1072,10 @@ function revealAnswersGrid() {
       item.classList.add('answered-wrong');
     }
   });
+
+  if (!pastPromptShown) {
+    startInspectionTimer();
+  }
 }
 
 function switchStage(from, to) {
