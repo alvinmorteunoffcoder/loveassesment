@@ -85,10 +85,10 @@ export const questions = [
     title: "Chapter X: Tokens of Affection",
     text: "What was the very first gift you presented to me?",
     type: "fill",
-    answer: "Moon Light",
-    acceptedAnswers: ["moon light", "moonlight", "moon lamp", "moonlight lamp", "moon", "lamp", "moon light lamp"],
+    answer: "Kiyo",
+    acceptedAnswers: ["kiyo", "Kiyo", "kiyo toy", "Kiyo doll"],
     placeholder: "Type the gift name here...",
-    note: "Moon Light — You brought the moonlight straight into my world, Still I Having It On My Desk, Will keep it Forever."
+    note: "Kiyo Doll, The Day is So Amazing"
   },
   {
     id: 11,
