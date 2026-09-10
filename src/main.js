@@ -91,7 +91,7 @@ function playSound(type) {
 
 function triggerHaptic() {
   if (navigator.vibrate) {
-    try { navigator.vibrate(30); } catch (e) {}
+    try { navigator.vibrate(30); } catch (e) { }
   }
 }
 
@@ -115,7 +115,7 @@ function showCustomDialog({ icon = '💖', title, message, buttons = [] }) {
     buttons = [{
       text: 'Okay ❤️',
       class: 'btn-primary btn-full',
-      onClick: () => {}
+      onClick: () => { }
     }];
   }
 
@@ -181,7 +181,7 @@ btnResetApp.addEventListener('click', () => {
       {
         text: 'Cancel',
         class: 'btn-secondary btn-full',
-        onClick: () => {}
+        onClick: () => { }
       }
     ]
   });
@@ -361,7 +361,7 @@ function showReturningUserDialogue() {
         }
       },
       {
-        text: '🔓 Decrypt Master Answers & Memory Notes',
+        text: '🔓 Decrypt Answers & Memory Notes',
         class: 'btn-secondary btn-full',
         onClick: () => {
           pastPromptShown = true;
@@ -414,7 +414,7 @@ function renderGrid() {
 function updateGridState() {
   const answeredCount = Object.keys(answers).length;
   currentLevel = answeredCount + 1;
-  
+
   const scoreBadge = document.getElementById('vault-score-badge');
   if (scoreBadge) scoreBadge.style.display = 'none';
 
@@ -427,11 +427,11 @@ function updateGridState() {
     setTimeout(calculateResults, 500);
     return;
   }
-  
+
   for (let i = 1; i <= 22; i++) {
     const item = document.getElementById(`grid-item-${i}`);
     if (!item) continue;
-    
+
     item.classList.remove('locked', 'unlocked', 'answered-correct', 'answered-wrong', 'answered-neutral');
 
     if (answers[i]) {
@@ -463,7 +463,7 @@ function handleGridItemClick(id) {
     });
     return;
   }
-  
+
   openQuestionModal(id);
 }
 
@@ -481,15 +481,15 @@ function openQuestionModal(id) {
   if (q.type === 'mcq' || q.type === 'yesno') {
     const optionsDiv = document.createElement('div');
     optionsDiv.className = 'options-container';
-    
+
     let selectedOption = answers[id]?.value || null;
-    
+
     q.options.forEach(opt => {
       const btn = document.createElement('button');
       btn.className = 'option-btn';
       if (selectedOption === opt) btn.classList.add('selected');
       btn.innerHTML = `<span>${opt}</span> <span class="opt-check">👉</span>`;
-      
+
       btn.onclick = () => {
         playSound('click');
         triggerHaptic();
@@ -499,7 +499,7 @@ function openQuestionModal(id) {
       };
       optionsDiv.appendChild(btn);
     });
-    
+
     btnSubmitAnswer.onclick = () => {
       if (!selectedOption) {
         playSound('error');
@@ -514,7 +514,7 @@ function openQuestionModal(id) {
       saveAnswer(id, selectedOption);
     };
     modalBody.appendChild(optionsDiv);
-    
+
   } else if (q.type === 'fill' || q.type === 'collect') {
     const container = document.createElement('div');
     const input = document.createElement('input');
@@ -522,7 +522,7 @@ function openQuestionModal(id) {
     input.className = 'input-field';
     input.placeholder = q.placeholder || 'Type your answer here...';
     if (answers[id]) input.value = answers[id].value;
-    
+
     let wordCountBadge = null;
     if (q.minWords) {
       wordCountBadge = document.createElement('span');
@@ -535,7 +535,7 @@ function openQuestionModal(id) {
       input.addEventListener('input', updateWords);
       updateWords();
     }
-    
+
     container.appendChild(input);
     if (wordCountBadge) container.appendChild(wordCountBadge);
 
@@ -569,10 +569,10 @@ function openQuestionModal(id) {
       saveAnswer(id, val);
     };
     modalBody.appendChild(container);
-    
+
   } else if (q.type === 'match') {
     const container = document.createElement('div');
-    
+
     let selectedVal1 = answers[id]?.value?.person1 || null;
     let selectedVal2 = answers[id]?.value?.person2 || null;
 
@@ -595,7 +595,7 @@ function openQuestionModal(id) {
       }
       saveAnswer(id, { person1: selectedVal1, person2: selectedVal2 });
     };
-    
+
     modalBody.appendChild(container);
   }
 
@@ -623,7 +623,7 @@ function createCustomSelect(labelTitle, optionsList, initialVal, onSelectCallbac
     item.className = 'custom-option-item';
     if (initialVal === opt) item.classList.add('selected');
     item.innerText = opt;
-    
+
     item.onclick = () => {
       playSound('click');
       triggerHaptic();
@@ -662,7 +662,7 @@ btnCloseModal.onclick = () => {
 function saveAnswer(id, value) {
   playSound('unlock');
   triggerHaptic();
-  
+
   const timestamp = new Date().toLocaleString();
   const sessionInfo = getSessionInfo();
   const q = questions.find(item => item.id === id);
@@ -804,7 +804,7 @@ btnDoneLetter.onclick = () => { playSound('click'); bdayLetterModal.classList.re
 // --- Decrypted Answers 30s Auto Timer Engine ---
 function startDecryptedAnswersTimer() {
   updateSecretLetterBanner();
-  
+
   if (secretLetterUnlocked) return;
   if (globalSpendingTimer) return;
 
@@ -832,7 +832,7 @@ function startDecryptedAnswersTimer() {
 function updateSecretLetterBanner() {
   const statusEl = document.getElementById('secret-letter-status');
   const btnEl = document.getElementById('btn-open-secret-letter');
-  
+
   if (secretLetterUnlocked) {
     if (statusEl) statusEl.innerHTML = `💌 <strong>Secret Birthday Letter Unlocked!</strong> 💖`;
     if (btnEl) btnEl.style.display = 'inline-flex';
@@ -909,22 +909,22 @@ function trigger5SecondUnskippableAlert() {
 // --- Results & Scoring ---
 function calculateResults() {
   switchStage(stageVault, stageResult);
-  
+
   let score = 0;
   let maxScore = 0;
-  
+
   questions.forEach(q => {
     if (q.type === 'collect' || q.type === 'yesno') return;
     maxScore++;
-    
+
     const ans = answers[q.id]?.value;
     if (!ans) return;
-    
+
     if (isAnswerCorrect(q, ans)) {
       score++;
     }
   });
-  
+
   const percentage = Math.round((score / maxScore) * 100);
   document.getElementById('score-percentage-text').innerText = `${percentage}%`;
   showResultUI(percentage);
@@ -976,14 +976,14 @@ function showResultUI(percentage) {
   const title = document.getElementById('result-title');
   const desc = document.getElementById('result-desc');
   const emoji = document.getElementById('result-emoji');
-  
+
   const disqualifiedUI = document.getElementById('disqualified-ui');
   const finalMessageUI = document.getElementById('final-message-ui');
 
   // ALWAYS require sending kisses first for all scores!
   disqualifiedUI.style.display = 'block';
   finalMessageUI.style.display = 'none';
-  
+
   if (percentage > 90) {
     emoji.innerText = '🥰';
     title.innerText = 'You Really Love Me! ❤️';
@@ -1019,10 +1019,10 @@ btnGetMessage.onclick = () => {
         onClick: () => {
           const text = encodeURIComponent("Here are 22,000 kisses for you! 😘😘😘💋💋💋 I want to unlock our memory vault!");
           window.open(`https://wa.me/918610629868?text=${text}`, '_blank');
-          
+
           btnGetMessage.style.display = 'none';
           whatsappLoader.style.display = 'flex';
-          
+
           let totalTimeMs = 25000;
           let elapsedTimeMs = 0;
           let activeSeconds = 0;
@@ -1046,9 +1046,9 @@ btnGetMessage.onclick = () => {
               whatsappLoader.style.display = 'none';
               document.getElementById('disqualified-ui').style.display = 'none';
               document.getElementById('final-message-ui').style.display = 'block';
-              
+
               document.getElementById('result-title').innerText = "Unlocked With 22,000 Kisses! 💋";
-              
+
               revealAnswersGrid();
             }
           }, 1000);
@@ -1057,7 +1057,7 @@ btnGetMessage.onclick = () => {
       {
         text: 'Cancel',
         class: 'btn-secondary btn-full',
-        onClick: () => {}
+        onClick: () => { }
       }
     ]
   });
@@ -1109,15 +1109,15 @@ function revealAnswersGrid() {
     if (!item) return;
 
     item.classList.remove('locked', 'unlocked', 'answered-neutral');
-    
+
     if (q.type === 'collect' || q.type === 'yesno') {
-       item.classList.add('answered-neutral');
-       return;
+      item.classList.add('answered-neutral');
+      return;
     }
-    
+
     const ans = answers[q.id]?.value;
     const correct = isAnswerCorrect(q, ans);
-    
+
     if (correct) {
       item.classList.add('answered-correct');
     } else {
