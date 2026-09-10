@@ -10,12 +10,12 @@ export const questions = [
   },
   {
     id: 2,
-    title: "Chapter II: First Eye Contact",
+    title: "Chapter II: First Road Cross Together",
     text: "What was the exact date I spoke to you in person for the very first time?",
     type: "mcq",
     options: ["July 10", "January 12", "Feb 15", "December 8"],
     answer: "January 12",
-    note: "January 12th — The unforgettable day my heart skipped a beat when I heard your voice live."
+    note: "January 12th — The unforgettable day my heart skipped a beat when you really came close to me."
   },
   {
     id: 3,
@@ -24,16 +24,16 @@ export const questions = [
     type: "mcq",
     options: ["A sweet chocolate", "Hot coffee", "A bottle of Water", "Ice cream"],
     answer: "A bottle of Water",
-    note: "Water — Simple, refreshing, and filled with quiet care."
+    note: "Thayava Senju Vangiko :)"
   },
   {
     id: 4,
-    title: "Chapter IV: First Impressions",
+    title: "Chapter IV: First Day Out",
     text: "What dress color was I wearing the very first time I came out with you?",
     type: "mcq",
     options: ["Classic Black", "Pure White", "Elite Rose", "Royal Blue"],
     answer: "Elite Rose",
-    note: "Elite Rose — You looked like an absolute dream that day."
+    note: "The Day That Really Dont Bother Me!, What You Wear"
   },
   {
     id: 5,
@@ -49,9 +49,9 @@ export const questions = [
     title: "Chapter VI: The Sacred Vow",
     text: "When is our official First Marriage date?",
     type: "mcq",
-    options: ["April 6 2026", "May 1 2026", "April 14 2026", "June 6 2026"],
-    answer: "April 6 2026",
-    note: "April 6, 2026 — The date we bind our souls together forever!"
+    options: ["April 6 2024", "May 1 2024", "April 14 2024", "June 6 2024"],
+    answer: "April 6 2024",
+    note: "April 6, 2024 — The date we bind our souls together forever!"
   },
   {
     id: 7,
@@ -60,7 +60,7 @@ export const questions = [
     type: "mcq",
     options: ["Feb 17", "March 12", "April 11", "January 20"],
     answer: "Feb 17",
-    note: "February 17th — The day we got our sanctuary, just you and me."
+    note: "February 17th — The day we got our Space, just you and me & your sister :), really feeling bad for her now, lol."
   },
   {
     id: 8,
@@ -88,17 +88,17 @@ export const questions = [
     answer: "Moon Light",
     acceptedAnswers: ["moon light", "moonlight", "moon lamp", "moonlight lamp", "moon", "lamp", "moon light lamp"],
     placeholder: "Type the gift name here...",
-    note: "Moon Light — You brought the moonlight straight into my world."
+    note: "Moon Light — You brought the moonlight straight into my world, Still I Having It On My Desk, Will keep it Forever."
   },
   {
     id: 11,
     title: "Chapter XI: Counter-Gift",
     text: "What was the very first gift I presented to you?",
     type: "fill",
-    answer: "Smiley Key Chain",
-    acceptedAnswers: ["smiley key chain", "smiley keychain", "keychain", "smiley key ring", "key chain", "smiley"],
+    answer: "Moongirl Key Chain",
+    acceptedAnswers: ["moongirl key chain", "moongirl keychain", "keychain", "moongirl key ring", "key chain", "moongirl"],
     placeholder: "Type the gift name here...",
-    note: "Smiley Key Chain — To keep a smile on your face wherever you go."
+    note: "Moongirl Key Chain — Dont know Why But Suddenly When I Look at That in a Busy Super Market., It Resembles You and I Bought it For You, You Too In a Call With Me On That Time"
   },
   {
     id: 12,
@@ -108,12 +108,12 @@ export const questions = [
     person1: "Shaki",
     person2: "Charlie",
     options1: ["Red Saree", "White saree", "Blue Saree", "Green Saree"],
-    options2: ["Black Suit", "White Shirt and Pant", "Blue Shirt", "Traditional Dhoti"],
+    options2: ["Denim Shirt", "White Shirt and Pant", "Blue Shirt", "Red Shirt"],
     answer: {
       person1: "White saree",
       person2: "White Shirt and Pant"
     },
-    note: "Shaki in an elegant White Saree & Charlie in a sharp White Shirt & Pant — pure perfection."
+    note: "Shaki in an elegant White Saree & Charlie in a sharp White Shirt & Pant — pure perfection, We Roam Almost more than Kms with those outfits, its okei the entire city might saw you but what nice is you walk along with me, Hehe"
   },
   {
     id: 13,
@@ -142,7 +142,7 @@ export const questions = [
     answer: "Saree",
     acceptedAnswers: ["saree", "sari", "silk saree", "cotton saree", "dress saree"],
     placeholder: "Type dress type here...",
-    note: "Saree — The timeless traditional beauty."
+    note: "Saree — From My First Ever Earnings in My Life."
   },
   {
     id: 16,
@@ -152,7 +152,7 @@ export const questions = [
     answer: "Bucket Screenshot",
     acceptedAnswers: ["bucket screenshot", "bucket ss", "bucket list screenshot", "bucket", "screenshot", "ss", "bucket list"],
     placeholder: "Type image description here...",
-    note: "Bucket Screenshot — The snippet that sparked a thousand conversations."
+    note: "Bucket Screenshot — Do You Remember it Still?"
   },
   {
     id: 17,
@@ -187,7 +187,7 @@ export const questions = [
     type: "mcq",
     options: ["June 10", "June 29", "July 1", "May 30"],
     answer: "June 29",
-    note: "June 29th — The reunion that proved we belong together."
+    note: "June 29th — The reunion that proved we belong together, But?!"
   },
   {
     id: 21,
